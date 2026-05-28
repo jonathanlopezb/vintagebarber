@@ -1,4 +1,4 @@
-import { Search, User, CreditCard, Ticket } from "lucide-react";
+import { Search, User, CreditCard, Ticket, Star } from "lucide-react";
 
 export default function AdminPOS() {
   return (
