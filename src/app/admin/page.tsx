@@ -1,4 +1,4 @@
-import { TrendingUp, Users, Scissors, DollarSign } from "lucide-react";
+import { TrendingUp, Users, Scissors, DollarSign, FileText } from "lucide-react";
 
 export default function AdminDashboard() {
   return (
