@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Vintage Barbería — Sistema Inteligente de Gestión Enterprise. Control total de citas, ventas, comisiones y fidelización.">
+    <title>VINTAGE — Sistema Inteligente de Barbería</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+<!-- ══════════ LOGIN SCREEN ══════════ -->
+<div id="login-screen">
+    <div class="login-glow-1"></div>
+    <div class="login-glow-2"></div>
+    <div class="login-wrapper">
+        <div class="login-brand">
+            <img src="logo.png" alt="Vintage" class="login-logo" onerror="this.style.display='none';document.getElementById('login-logo-fb').style.display='flex'">
+            <div id="login-logo-fb" class="login-logo-fallback" style="display:none">V</div>
+            <h1 class="login-title">VINTAGE</h1>
+            <p class="login-subtitle">Smart Barbering System <span class="logo-tag">PRO v2.0</span></p>
+        </div>
+        <div class="login-card">
+            <div class="login-tabs">
+                <button class="login-tab active" id="tab-staff" onclick="switchLoginTab('staff')"><i class="fas fa-user-tie"></i> Personal</button>
+                <button class="login-tab" id="tab-client" onclick="switchLoginTab('client')"><i class="fas fa-scissors"></i> Soy Cliente</button>
+            </div>
+            <!-- Staff Login -->
+            <div id="login-form-staff" class="login-form-section">
+                <div class="form-group">
+                    <label><i class="fas fa-id-card"></i> Documento / Usuario</label>
+                    <input type="text" id="staff-doc" placeholder="Número de documento..." autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Contraseña</label>
+                    <div class="input-pw-wrap">
+                        <input type="password" id="staff-pass" placeholder="Tu contraseña" onkeydown="if(event.key==='Enter')loginStaff()">
+                        <button type="button" class="toggle-pass-btn" onclick="togglePass('staff-pass')"><i class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+                <button class="btn btn-primary login-btn" onclick="loginStaff()"><i class="fas fa-sign-in-alt"></i> Ingresar al Sistema</button>
+                <div class="login-demo-hint">
+                    <i class="fas fa-circle-info"></i>
+                    <div><b>Demo:</b> Superadmin <code>1111/1111</code> · Admin <code>2222/2222</code> · Barbero <code>3333/3333</code></div>
+                </div>
+            </div>
+            <!-- Client Login -->
+            <div id="login-form-client" class="login-form-section" style="display:none">
+                <div class="form-group">
+                    <label><i class="fas fa-id-card"></i> Tu Número de Cédula</label>
+                    <input type="text" id="client-cedula" placeholder="Ej: 101010" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Contraseña <span style="color:var(--text-muted);font-size:.75rem">(inicial = tu cédula)</span></label>
+                    <div class="input-pw-wrap">
+                        <input type="password" id="client-pass" placeholder="Tu clave" onkeydown="if(event.key==='Enter')loginClient()">
+                        <button type="button" class="toggle-pass-btn" onclick="togglePass('client-pass')"><i class="fas fa-eye"></i></button>
+                    </div>
+                </div>
+                <button class="btn btn-primary login-btn" onclick="loginClient()"><i class="fas fa-gem"></i> Ver Mi Portal</button>
+                <div class="login-demo-hint">
+                    <i class="fas fa-circle-info"></i>
+                    <div><b>Demo cliente:</b> Cédula <code>101010</code> · Clave <code>101010</code></div>
+                </div>
+            </div>
+        </div>
+        <p class="login-footer">© 2026 Vintage Barbería · Sistema Enterprise</p>
+    </div>
+</div>
+
+<!-- ══════════ MAIN APP ══════════ -->
+<div id="app-container" class="hidden">
+    <header id="main-header">
+        <div class="header-left">
+            <button id="sidebar-toggle" onclick="toggleSidebar()" class="sidebar-toggle-btn" title="Menú"><i class="fas fa-bars"></i></button>
+            <div class="logo-container">
+                <img src="logo.png" class="logo-img" alt="V" onerror="this.style.display='none'">
+                <div style="display:flex;flex-direction:column">
+                    <span class="logo-text">Vintage</span>
+                    <span style="font-size:.6rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px">Smart Barbering</span>
+                </div>
+                <span class="logo-tag">PRO</span>
+            </div>
+        </div>
+        <div class="header-actions">
+            <div class="header-clock" id="header-clock"></div>
+            <div class="user-badge">
+                <div class="user-avatar" id="header-avatar">S</div>
+                <div class="user-info-text">
+                    <span class="user-name" id="header-name">Usuario</span>
+                    <span class="user-role-label" id="header-role">Rol</span>
+                </div>
+                <button class="logout-btn" onclick="logout()" title="Cerrar Sesión"><i class="fas fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+    </header>
+
+    <div id="app-layout">
+        <nav id="sidebar">
+            <div id="sidebar-nav"></div>
+            <div class="sidebar-footer">
+                <div class="sidebar-version"><i class="fas fa-circle" style="color:var(--color-success);font-size:.45rem"></i> Sistema Activo · v2.0</div>
+            </div>
+        </nav>
+        <main id="main-content">
+            <div class="loading-full"><i class="fas fa-spinner fa-spin" style="font-size:2rem;color:var(--color-gold)"></i></div>
+        </main>
+    </div>
+</div>
+
+<!-- ══════════ MODAL OVERLAY ══════════ -->
+<div id="modal-overlay" onclick="handleOverlayClick(event)">
+    <div id="modal-container"></div>
+</div>
+
+<!-- ══════════ TOAST CONTAINERS ══════════ -->
+<div id="whatsapp-toast-container"></div>
+<div id="system-toast-container"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
