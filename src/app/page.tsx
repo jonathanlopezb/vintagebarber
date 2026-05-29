@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Phone, CheckCircle, Calendar, Clock, Shield, Star, Edit3, ChevronRight } from "lucide-react";
 
 const services = [
@@ -35,15 +35,20 @@ export default function Home() {
   const selectedService = services.find((s) => s.id === formData.serviceId);
   const selectedBarber = barbers.find((b) => b.id === formData.barberId);
 
-  // Generate next 7 days
-  const dates = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() + i + 1);
-    return {
-      iso: d.toISOString().split("T")[0],
-      label: d.toLocaleDateString("es-CO", { weekday: "short", day: "numeric", month: "short" }),
-    };
-  });
+  // Generate next 7 days — client-side only to avoid hydration mismatch
+  const [dates, setDates] = useState<{ iso: string; label: string }[]>([]);
+  useEffect(() => {
+    setDates(
+      Array.from({ length: 7 }, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() + i + 1);
+        return {
+          iso: d.toISOString().split("T")[0],
+          label: d.toLocaleDateString("es-CO", { weekday: "short", day: "numeric", month: "short" }),
+        };
+      })
+    );
+  }, []);
 
   const times = ["09:00", "09:45", "10:30", "11:15", "12:00", "14:00", "14:45", "15:30", "16:15", "17:00"];
 
